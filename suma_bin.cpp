@@ -2,117 +2,115 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#define TALLA 20
-
+#define BUFFtmpflagR_SIZtmpflag 20
 
 using namespace std;
+using std::cout;
+using std::cin;
+using std::endl;
 
-
-int contar_caracteres(char arr[]){
-	int n=0;
-	while( arr[n] != '\0' ) 
-		n++;
-	return n;
+int count_chars(char arr[]){
+	int numberofcharacters = 0;
+	while(arr[numberofcharacters] != '\0') 
+		++numberofcharacters;
+	return numberofcharacters;
 }
 
-void sumar_binario(char mayor[], char menor[], char resultado[]){
-	bool E = false;
+void sum_binary(char majorbuffer[], char minorbuffer[], char result[]){
+	bool tmpflag = false;
 
-	int nMayor, nMenor;
-	nMayor = contar_caracteres(mayor)-1;
-	nMenor = contar_caracteres(menor)-1;
-	resultado[nMayor+2]  = '\0';
-	resultado[0]  = '0';
+	int nmajor = count_chars(majorbuffer)-1,
+		nminor = count_chars(minorbuffer)-1;
 	
-	while(nMenor >= 0){
-
-		if(mayor[nMayor] == menor[nMenor]){
-			if(mayor[nMayor] == '1'){
-				if(E == true)
-					resultado[nMayor+1] = '1';
+	result[nmajor+2] = '\0';
+	result[0] = '0';
+	
+	while(nminor >= 0){
+		if(majorbuffer[nmajor] == minorbuffer[nminor]){
+			if(majorbuffer[nmajor] == '1'){
+				if(tmpflag == true)
+					result[nmajor+1] = '1';
 				else{
-					resultado[nMayor+1] = '0';
-					E = true;
+					result[nmajor+1] = '0';
+					tmpflag = !tmpflag;
 				}
 
 			}
 			else{
-				if(E == true){
-					resultado[nMayor+1] = '1';
-					E = false;
+				if(tmpflag == true){
+					result[nmajor+1] = '1';
+					tmpflag = !tmpflag;
 				}
 				else
-					resultado[nMayor+1] = '0';
+					result[nmajor+1] = '0';
 			}
 	
 		}
 		else{
-			if(E == true){
-				resultado[nMayor+1] = '0';
-			}
-			else{
-				resultado[nMayor+1] = '1';
-			}
+			if(tmpflag == true)
+				result[nmajor+1] = '0';
+			else
+				result[nmajor+1] = '1';
 		}
 
-	nMayor--; nMenor--;
-			
+		--nmajor;
+	 	--nminor;
 	}
 
 	
 
-	while( nMayor >= 0 ){
-		if(E == true)
-			if( mayor[nMayor] == '1')
-				resultado[nMayor+1]  = '0';
+	while( nmajor >= 0 ){
+		if(tmpflag == true)
+			if( majorbuffer[nmajor] == '1')
+				result[nmajor+1]  = '0';
 			else{
-				resultado[nMayor+1]  = '1';
-				E = false;
+				result[nmajor+1]  = '1';
+				tmpflag = false;
 			}
 		else
-			resultado[nMayor+1]  = mayor[nMayor];
+			result[nmajor+1]  = majorbuffer[nmajor];
 
-		nMayor--; nMenor--;
+		nmajor--; nminor--;
 	}
 
-	if( E == true )
-		resultado[0]  = '1';
+	if( tmpflag == true )
+		result[0]  = '1';
 
 }
 
 
-void comprobar_mayor(char valorA[], char valorB[],char resultado[]){
+void check_major(char binaryBufferA[], char binaryBufferB[],char result[]){
 	
-	if( contar_caracteres(valorA) > contar_caracteres(valorB) )
-		sumar_binario(valorA, valorB, resultado);
+	if(count_chars(binaryBufferA) > count_chars(binaryBufferB) )
+		sum_binary(binaryBufferA, binaryBufferB, result);
 	else
-		sumar_binario(valorB, valorA, resultado);
+		sum_binary(binaryBufferB, binaryBufferA, result);
 
 }
 
-void mostrar(char arr[]){
-	int n;
-	n = contar_caracteres(arr);
-	for(int i = 0; i < n ; i++)
-		cout << arr[i];
-	cout << endl;
+void show(char arr[]){
+	int numberofcharacters = count_chars(arr);
+
+	for(int index = 0; index < numberofcharacters ; index++)
+		cout<<arr[index];
+	cout<<endl;
 }
 
 
 int main(int argc, char const *argv[])
 {
+	char binaryBufferA[BUFFtmpflagR_SIZtmpflag],binaryBufferB[BUFFtmpflagR_SIZtmpflag], result[BUFFtmpflagR_SIZtmpflag];
+
+	cout<<"Ingrese binaryBufferes de A: "; 
+	cin>>binaryBufferA;
 	
-	
-	char valorA[TALLA],valorB[TALLA], resultado[TALLA];
+	cout<<"Ingrese binaryBufferes de B: "; 
+	cin>>binaryBufferB;
 
-	cout << "Ingrese valores de A: "; cin >> valorA;
-	cout << "Ingrese valores de B: "; cin >> valorB;
+	check_major(binaryBufferA,binaryBufferB, result);
 
-	comprobar_mayor(valorA,valorB, resultado);
+	show(result);
 
-	mostrar(resultado);
-
-
-	return 0;
+	return 0x0;
 }
 
